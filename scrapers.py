@@ -3,6 +3,7 @@ from selenium.webdriver.common.by import By
 import json
 
 # test comment
+# test comment 2
 def getDriver(url):
     chrome_options = webdriver.ChromeOptions()
     chrome_options.add_argument('--headless')
