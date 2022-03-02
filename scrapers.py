@@ -74,6 +74,7 @@ def scrapeCars():
             - for other cars.
             - thus we have to check and see if its an electric car
             - if it is an electric car, we do not use city/hwy mpg, we use electricRange
+            - if it is not an electric car, we need to split the mpg (formatted like "37/55") into city and hwy
             '''
             if (json_object['Models'][i]['Category']['Id'] != "environmental-vehicles"):
                 a, b = json_object['Models'][i]['Mpg'].split('/', 1)
