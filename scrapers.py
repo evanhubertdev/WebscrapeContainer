@@ -22,12 +22,64 @@ def scrapeCars():
     #print(json_object)
     formattedData = {}
     formattedData['vehicles'] = []
+    tempDict = {}
+    sedanData = {}
+    sedanData['cars-Sedans'] = []
+    hatchbackData = {}
+    hatchbackData['cars-Hatchbacks'] = []
+    minivanTruckData = {}
+    minivanTruckData['minivan-truck'] = []
+    suvData = {}
+    suvData['crossover-and-suv'] = []
+    electricData = {}
+    electricData['electrified'] = []
+
     length = len(json_object['Models'])
     i = 0
+
     while i < length:
-        formattedData['vehicles'].append(json_object['Models'][i]['Id'])
+        
+        if (json_object['Models'][i]['Category']['Id'] == "sedans"):
+            tempDict['name'] = json_object['Models'][i]['ModelName']
+            tempDict['price'] = json_object['Models'][i]['Msrp']
+            tempDict['mileage'] = json_object['Models'][i]['Mpg']
+            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            sedanData['cars-Sedans'].append(tempDict)
+            tempDict = {}
+        elif (json_object['Models'][i]['Category']['Id'] == "hatchbacks"):
+            tempDict['name'] = json_object['Models'][i]['ModelName']
+            tempDict['price'] = json_object['Models'][i]['Msrp']
+            tempDict['mileage'] = json_object['Models'][i]['Mpg']
+            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            hatchbackData['cars-Hatchbacks'].append(tempDict)
+            tempDict = {}
+        elif (json_object['Models'][i]['Category']['Id'] == "crossovers-suv"):
+            tempDict['name'] = json_object['Models'][i]['ModelName']
+            tempDict['price'] = json_object['Models'][i]['Msrp']
+            tempDict['mileage'] = json_object['Models'][i]['Mpg']
+            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            suvData['crossover-and-suv'].append(tempDict)
+            tempDict = {}
+        elif (json_object['Models'][i]['Category']['Id'] == "minivan-truck"):
+            tempDict['name'] = json_object['Models'][i]['ModelName']
+            tempDict['price'] = json_object['Models'][i]['Msrp']
+            tempDict['mileage'] = json_object['Models'][i]['Mpg']
+            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            minivanTruckData['minivan-truck'].append(tempDict)
+        elif (json_object['Models'][i]['Category']['Id'] == "environmental-vehicles"):
+            tempDict['name'] = json_object['Models'][i]['ModelName']
+            tempDict['price'] = json_object['Models'][i]['Msrp']
+            tempDict['mileage'] = json_object['Models'][i]['Mpg']
+            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            electricData['electrified'].append(tempDict)
+            tempDict = {}
         i+=1
-    
+
+    formattedData['vehicles'].append(sedanData)
+    formattedData['vehicles'].append(hatchbackData)
+    formattedData['vehicles'].append(minivanTruckData)
+    formattedData['vehicles'].append(suvData)
+    formattedData['vehicles'].append(electricData)
     return json.dumps(formattedData)
 
 """
