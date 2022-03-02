@@ -78,7 +78,10 @@ def scrapeCars():
             tempDict['name'] = json_object['Models'][i]['ModelName']
             tempDict['price'] = json_object['Models'][i]['Msrp']
             tempDict['mileage'] = json_object['Models'][i]['Mpg']
-            tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            if (json_object['Models'][i]['ModelName'] != "CR-V Hybrid"):
+                tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
+            else:
+                tempDict['url'] = 'https://automobiles.honda.com/cr-v#features-hybrid'
             suvData['crossover-and-suv'].append(tempDict)
             tempDict = {}
         elif (json_object['Models'][i]['Category']['Id'] == "minivan-truck"):
