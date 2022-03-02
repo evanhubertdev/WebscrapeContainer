@@ -16,12 +16,27 @@ def getDriver(url):
     return driver
 
 def scrapeCars():
+    '''
+    get URL for honda automobiles API
+    '''
     url = "https://automobiles.honda.com/platform/api/v1/model-select/configuration/bap"
+
+    '''
+    open URL and load(s) into json object
+    '''
     response = urlopen(url)
     json_object = json.loads(response.read())
-    #print(json_object)
+    
+    '''
+    create list for formatted JSON string
+    '''
     formattedData = {}
     formattedData['vehicles'] = []
+
+    '''
+    tempDict, sedanData, hatchbackData, minivanTruckData, and suvData are all lists which are appended to formattedData
+    each holding their respective data in a json object
+    '''
     tempDict = {}
     sedanData = {}
     sedanData['cars-Sedans'] = []
@@ -32,11 +47,19 @@ def scrapeCars():
     suvData = {}
     suvData['crossover-and-suv'] = []
 
+    '''
+    only iterate over the number of models in the API
+    '''
     length = len(json_object['Models'])
     i = 0
-
     while i < length:
-        
+
+        '''
+        - start with sedan scraping (includes electric vehicles)
+        - parse name, price, and mileage into the tempDict
+        - make tempDict empty after appended to (carType)Data to make room for new car data
+        - continue for hatchbacks, crossovers/suv, and minivan/truck
+        '''
         if (json_object['Models'][i]['Category']['Id'] == "sedans" or json_object['Models'][i]['Category']['Id'] == "environmental-vehicles"):
             tempDict['name'] = json_object['Models'][i]['ModelName']
             tempDict['price'] = json_object['Models'][i]['Msrp']
@@ -66,68 +89,18 @@ def scrapeCars():
             minivanTruckData['minivan-truck'].append(tempDict)
         i+=1
 
+    '''
+    append each (carType)Data list to the formattedData json object
+    '''
     formattedData['vehicles'].append(sedanData)
     formattedData['vehicles'].append(hatchbackData)
     formattedData['vehicles'].append(minivanTruckData)
     formattedData['vehicles'].append(suvData)
+
+    '''
+    return formattedData as string to scraperesults container
+    '''
     return json.dumps(formattedData)
-
-"""
-def scrapeCars():
-    driver = getDriver("https://automobiles.honda.com/tools/build-and-price")
-
-    carTypes = driver.find_elements(By.CLASS_NAME, "vehicle-sort-main-container")
-    rawData = {}
-    rawData['vehicles'] = []
-    for carType in carTypes:
-        carTypeString = carType.get_attribute("data-attribute")
-        if carTypeString is not None:
-            carSubtypes = carType.find_elements(By.CLASS_NAME, "vehicle-sort-sub-container")
-            for carSubtype in carSubtypes:
-                carSubtypeJson = {}
-                # Try getting Car Subtype, may not exist
-                try:
-                    carSubtypeString = carSubtype.find_element(By.TAG_NAME, "h4").find_element(By.TAG_NAME, "div").find_element(By.TAG_NAME, "span").text
-                except Exception:
-                    carSubtypeString = None
-                carSubtypeJsonString = carTypeString if carSubtypeString == None else carTypeString + "-" + carSubtypeString
-                carSubtypeJson[carSubtypeJsonString] = []
-                # Get Cars
-                rowOfCars = carSubtype.find_element(By.CSS_SELECTOR, "div[class='cards clearfix']").find_elements(By.CSS_SELECTOR, "div[class='rzf-gry-card-row clearfix']")
-                for row in rowOfCars:
-                    cars = row.find_elements(By.CSS_SELECTOR, "article[class='rzf-gry rzf-gry-card-tile card vehicle']")
-                    for car in cars:
-                        carJson = {}
-                        # Get Car Name
-                        name = car.find_element(By.TAG_NAME, "h5").text
-                        carJson['name'] = name
-                        infoElements = car.find_element(By.CLASS_NAME, "rzf-gry-card-vehicle-info").find_elements(By.TAG_NAME, "div")
-                        # Get Price
-                        price = infoElements[0].find_element(By.TAG_NAME, "span").text
-                        carJson['price'] = price
-                        # Get Gas Mileage/Electric Range
-                        combinedMilageList = infoElements[1].find_element(By.TAG_NAME, "span").text.split('/')
-                        # Electic vehicles only list range, so if it only has 1 value, it's electric
-                        if len(combinedMilageList) == 2:
-                            cityMileage = combinedMilageList[0]
-                            carJson['cityMileage'] = cityMileage
-                            highwayMileage = combinedMilageList[1]
-                            carJson['highwayMileage'] = highwayMileage
-                        else:
-                            electricRange = combinedMilageList[0]
-                            carJson['electricRange'] = electricRange
-                        
-                        # Get Link
-                        buildLink = car.find_element(By.CLASS_NAME, "rzf-gry-card-primary-ctas").find_element(By.CSS_SELECTOR, "a[class='m_cta is-on-light io-listener is-primary']").get_attribute("href")
-                        carJson['url'] = buildLink
-
-                        # Add to carSubtypeJson
-                        carSubtypeJson[carSubtypeJsonString].append(carJson)
-                rawData['vehicles'].append(carSubtypeJson)
-
-    driver.close()
-    return json.dumps(rawData)
-"""
 
 def scrapeNews():
     driver = getDriver("https://global.honda/newsroom/")
