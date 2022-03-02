@@ -129,6 +129,7 @@ def scrapeCars():
             tempDict['highwayMileage'] = b
             tempDict['url'] = 'https://automobiles.honda.com/' + json_object['Models'][i]['ModelName'].replace(' ', '-').lower()
             minivanTruckData['minivan-truck'].append(tempDict)
+            tempDict = {}
         i+=1
 
     '''
