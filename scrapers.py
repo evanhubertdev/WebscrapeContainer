@@ -64,8 +64,9 @@ def scrapeCars():
             '''
             Note about MSRP Formatting: 
             - Msrp from the API is in format 12345.67; the format below parses to be in correct currency format
+            - also omits decimal places
             '''
-            tempDict['price'] = "${:,.2f}".format(float(json_object['Models'][i]['Msrp']))
+            tempDict['price'] = "${:,.0f}".format(float(json_object['Models'][i]['Msrp']))
 
             '''
             Note about cityMileage and highwayMileage
@@ -94,7 +95,7 @@ def scrapeCars():
             tempDict = {}
         elif (json_object['Models'][i]['Category']['Id'] == "hatchbacks"):
             tempDict['name'] = json_object['Models'][i]['ModelName']
-            tempDict['price'] = "${:,.2f}".format(float(json_object['Models'][i]['Msrp']))
+            tempDict['price'] = "${:,.0f}".format(float(json_object['Models'][i]['Msrp']))
             a, b = json_object['Models'][i]['Mpg'].split('/', 1)
             tempDict['cityMileage'] = a
             tempDict['highwayMileage'] = b
@@ -103,7 +104,7 @@ def scrapeCars():
             tempDict = {}
         elif (json_object['Models'][i]['Category']['Id'] == "crossovers-suv"):
             tempDict['name'] = json_object['Models'][i]['ModelName']
-            tempDict['price'] = "${:,.2f}".format(float(json_object['Models'][i]['Msrp']))
+            tempDict['price'] = "${:,.0f}".format(float(json_object['Models'][i]['Msrp']))
             a, b = json_object['Models'][i]['Mpg'].split('/', 1)
             tempDict['cityMileage'] = a
             tempDict['highwayMileage'] = b
@@ -124,7 +125,7 @@ def scrapeCars():
             tempDict = {}
         elif (json_object['Models'][i]['Category']['Id'] == "minivan-truck"):
             tempDict['name'] = json_object['Models'][i]['ModelName']
-            tempDict['price'] = "${:,.2f}".format(float(json_object['Models'][i]['Msrp']))
+            tempDict['price'] = "${:,.0f}".format(float(json_object['Models'][i]['Msrp']))
             a, b = json_object['Models'][i]['Mpg'].split('/', 1)
             tempDict['cityMileage'] = a
             tempDict['highwayMileage'] = b
