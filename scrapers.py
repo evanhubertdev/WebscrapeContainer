@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 import json
+from urllib.request import urlopen
 #test comment
 def getDriver(url):
     chrome_options = webdriver.ChromeOptions()
@@ -14,6 +15,22 @@ def getDriver(url):
 
     return driver
 
+def scrapeCars():
+    url = "https://automobiles.honda.com/platform/api/v1/model-select/configuration/bap"
+    response = urlopen(url)
+    json_object = json.loads(response.read())
+    #print(json_object)
+    formattedData = {}
+    formattedData['vehicles'] = []
+    length = len(json_object['Models'])
+    i = 0
+    while i < length:
+        formattedData['vehicles'].append(json_object['Models'][i]['Id'])
+        i+=1
+    
+    return json.dumps(formattedData)
+
+"""
 def scrapeCars():
     driver = getDriver("https://automobiles.honda.com/tools/build-and-price")
 
@@ -68,7 +85,7 @@ def scrapeCars():
 
     driver.close()
     return json.dumps(rawData)
-
+"""
 
 def scrapeNews():
     driver = getDriver("https://global.honda/newsroom/")
